@@ -1,0 +1,6 @@
+baseURL = "http://mobilephone724.github.io/"
+languageCode = "en-us"
+title = "mobilephone724's Blog"
+theme = "ananke"
+[markup.highlight]
+  style = 'rainbow_dash' # 样式参考 https://swapoff.org/chroma/playground
