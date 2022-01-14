@@ -76,21 +76,13 @@ enableEmoji = true
         title = ""
         weight = 4
       [[languages.en.menu.main]]
-        identifier = "about"
-        pre = ""
-        post = ""
-        name = "About"
-        url = "/about/"
-        title = ""
-        weight = 5
-      [[languages.en.menu.main]]
         identifier = "github"
         pre = "<i class='fab fa-github fa-fw'></i>"
         post = ""
         name = ""
         url = "https://github.com/dillonzq/LoveIt"
         title = "GitHub"
-        weight = 6
+        weight = 5
     [languages.en.params]
       # site description
       description = "About LoveIt Theme"
@@ -380,7 +372,7 @@ enableEmoji = true
     # KaTeX mathematical formulas config (KaTeX https://katex.org/)
     # KaTeX 数学公式配置 (KaTeX https://katex.org/)
     [params.page.math]
-      enable = false
+      enable = true
       # default block delimiter is $$ ... $$ and \\[ ... \\]
       # 默认块定界符是 $$ ... $$ 和 \\[ ... \\]
       blockLeftDelimiter = ""
