@@ -41,7 +41,7 @@ The main features of F1 that impact schema changes are:
 + No global membership:
   + no reliable mechanism for determining currently running F1 servers, and explicit **global synchronization is not possible**
 
-![image-20230814210030515](./index.assets/image-20230814210030515.png)
+![image-20230814210030515](attachments/image-20230814210030515.png)
 
 several constraints on the schema change process:
 
@@ -117,4 +117,35 @@ enables distributed schema changes in a way that
     + required columns that cannot be read directly by client transactions
 +  A subset of columns in a table forms the primary key of the table
 + We call a column **required** if its value must be present in every row. All primary-key columns are implicitly required, while non-key columns may be either required or **optional**
+
+### Row representation
+
++ one pair for each non-primary-key column
+
++ Each key logically includes
+  + the name of the table,
+  + the primary key values of the containing row,
+  + the name of the column whose value is stored in the pair
++ Although this appears to needlessly repeat all primary key values in the key for each column value, in practice, **F1’s physical storage format eliminates this redundancy**
+
+![](attachments/Pasted%20image%2020230815213806.png)
+![](attachments/Pasted%20image%2020230815213818.png)
+
++ A secondary index
+  + covers a **non-empty subset of columns** on a table
+  + is itself represented by **a set of key–value pairs** in the key– value store
+  + Each row in the indexed table has an associated index key–value pair
+    + The key for this pair is formed by concatenating
+      + the table name
+      + the index name
+      + the row’s indexed column values
+      + and the row’s primary key values
+  + We denote the index key for row $r$ in index $I$ as $k_r(I)$
+  + the special exists column doesn't have the associated value
+### Relational operations
+F1 supports a set of standard relational operations:
++ $insert(R,vk_r,vc_r)$ inserts row *r* to table *R* with primary key values $vk_r$ and non-key column values $vc_r$. Insert fails if a row with the same primary key values already exists in table R.
++ $delete (R, vk_r )$
++ $update(R,vk_r,vc_r)$
++ $query(\vec{R},\vec{C},P)$ :returns a projection $\vec{C}$ of rows from tables in $\vec{R}$ that satisfy predicate $P$ .
 

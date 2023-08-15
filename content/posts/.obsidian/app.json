@@ -1,0 +1,11 @@
+{
+  "readableLineLength": true,
+  "useMarkdownLinks": true,
+  "newFileLocation": "root",
+  "newLinkFormat": "relative",
+  "showUnsupportedFiles": true,
+  "attachmentFolderPath": "./attachments",
+  "alwaysUpdateLinks": true,
+  "strictLineBreaks": true,
+  "foldIndent": false
+}
