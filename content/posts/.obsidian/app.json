@@ -1,5 +1,5 @@
 {
-  "readableLineLength": true,
+  "readableLineLength": false,
   "useMarkdownLinks": true,
   "newFileLocation": "root",
   "newLinkFormat": "relative",
@@ -7,5 +7,9 @@
   "attachmentFolderPath": "./attachments",
   "alwaysUpdateLinks": true,
   "strictLineBreaks": true,
-  "foldIndent": false
+  "foldIndent": false,
+  "rightToLeft": false,
+  "showIndentGuide": false,
+  "useTab": false,
+  "tabSize": 2
 }
