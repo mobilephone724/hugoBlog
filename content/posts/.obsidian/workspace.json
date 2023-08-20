@@ -30,9 +30,21 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "1f28f6e8a2b52926",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "LearnEnglish/Chapter12.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -99,7 +111,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "LearnEnglish/Chapter11.md",
+                "file": "LearnEnglish/Chapter12.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -116,7 +128,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "LearnEnglish/Chapter11.md",
+                "file": "LearnEnglish/Chapter12.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -139,7 +151,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "LearnEnglish/Chapter11.md"
+                "file": "LearnEnglish/Chapter12.md"
               }
             }
           }
@@ -160,11 +172,12 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "53204f0881d14933",
+  "active": "1f28f6e8a2b52926",
   "lastOpenFiles": [
+    "LearnEnglish/Chapter11.md",
+    "LearnEnglish/Chapter12.md",
     "LearnEnglish/Chapter10.md",
     "LearnEnglish/230814LearnEnglish.md",
-    "LearnEnglish/Chapter11.md",
     "Db/Read-Google-F1/index.md",
     "Db/Read-Google-F1/attachments/Pasted image 20230815213818.png",
     "Db/Read-Google-F1/attachments/Pasted image 20230815213806.png",
