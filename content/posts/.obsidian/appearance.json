@@ -1,8 +1,9 @@
 {
   "accentColor": "",
-  "theme": "moonstone",
+  "theme": "system",
   "textFontFamily": "JetBrainsMono Nerd Font Mono",
   "monospaceFontFamily": "JetBrainsMono Nerd Font Mono",
   "showViewHeader": true,
-  "baseFontSize": 16
+  "baseFontSize": 18,
+  "cssTheme": ""
 }

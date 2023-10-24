@@ -4,47 +4,81 @@
     "type": "split",
     "children": [
       {
-        "id": "090e0c81cffaf308",
+        "id": "f1cb19f1fe3b5cd6",
         "type": "tabs",
         "children": [
           {
-            "id": "20ea5fdf520c6f60",
+            "id": "9636c3a529881982",
+            "type": "leaf",
+            "pinned": true,
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Db/PGVEC/index.md",
+                "mode": "source",
+                "source": false
+              },
+              "pinned": true
+            }
+          },
+          {
+            "id": "7afec94f0aa56845",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "LearnEnglish/Chapter10.md",
+                "file": "Db/LogBase/index.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "53204f0881d14933",
+            "id": "9c3ea6c136d35475",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "LearnEnglish/Chapter11.md",
+                "file": "Db/PGVEC/CODE_READING.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "1f28f6e8a2b52926",
+            "id": "f7ac684ece6c2336",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
+              "state": {
+                "currentVersion": "1.4.16"
+              }
+            }
+          },
+          {
+            "id": "5d2641ddb12c8908",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "LearnEnglish/Chapter12.md",
+                "file": "Db/PGVEC/CODE_READING.md",
                 "mode": "source",
                 "source": false
+              }
+            }
+          },
+          {
+            "id": "e14e1a9f3e075c08",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "Db/PGVEC/attachments/HNSW_SEARCH_LAYER_ALGORITHM.png"
               }
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -94,8 +128,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 274.5026054382324,
-    "collapsed": true
+    "width": 335.5
   },
   "right": {
     "id": "c47306b1a7dce281",
@@ -111,8 +144,8 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "LearnEnglish/Chapter12.md",
-                "collapseAll": false,
+                "file": "Db/LogBase/index.md",
+                "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
                 "showSearch": false,
@@ -128,7 +161,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "LearnEnglish/Chapter12.md",
+                "file": "Db/LogBase/index.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -151,16 +184,16 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "LearnEnglish/Chapter12.md"
+                "file": "Db/LogBase/index.md"
               }
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 291.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -172,16 +205,37 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "1f28f6e8a2b52926",
+  "active": "7afec94f0aa56845",
   "lastOpenFiles": [
-    "LearnEnglish/Chapter11.md",
+    "Db/PGVEC/index.md",
+    "Db/PGVEC/attachments/PGVEC-HNSW-PAGE.png",
+    "Db/PGVEC/attachments/Pasted image 20231024010957.png",
+    "Db/PGVEC/attachments/HNSW_PAGE_REPRESENTATION.png",
+    "Db/PGVEC/CODE_READING.md",
+    "Db/PGVEC/attachments/illustration-of-HNSW.png",
+    "Db/PGVEC/attachments/HNSW_SEARCH_LAYER_ALGORITHM.png",
+    "Db/PGVEC/attachments/HNSW_INSERT_ALGORITH.png",
+    "Db/PGVEC/pgvector分享.md",
+    "Db/PGVEC/attachments/IVF-pages-represent.png",
+    "Db/PGVEC/attachments/image-20231022163510858.png",
+    "Db/PGVEC/papers/PASE.pdf",
+    "Db/PGVEC/attachments/image-20231019083455082.png",
+    "Db/PGVEC/attachments/image-20231019083455082 1.png",
+    "Db/PGVEC/index.assets",
+    "Db/PGVEC/papers/kMeansPP-soda.pdf",
+    "Db/PGVEC/papers/ICML03-022.pdf",
+    "Db/PGVEC/papers/HNSW.pdf",
+    "Db/LogBase/index.md",
+    "Db/PGVEC/papers/未确认 555962.crdownload",
     "LearnEnglish/Chapter12.md",
+    "LearnEnglish/Chapter11.md",
+    "LearnEnglish/Chapter13.md",
+    "Db/PGVEC/attachments",
     "LearnEnglish/Chapter10.md",
-    "LearnEnglish/230814LearnEnglish.md",
+    "Db/PGVEC/papers",
+    "Db/PGVEC_HNSW/未命名文件夹",
     "Db/Read-Google-F1/index.md",
-    "Db/Read-Google-F1/attachments/Pasted image 20230815213818.png",
-    "Db/Read-Google-F1/attachments/Pasted image 20230815213806.png",
-    "Db/Read-Google-F1/attachments/Pasted image 20230815212718.png",
-    "Db/Read-Google-F1/attachments"
+    "Db/PGVEC",
+    "LearnEnglish/230814LearnEnglish.md"
   ]
 }
