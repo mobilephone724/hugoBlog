@@ -2,8 +2,9 @@
 title: WAL基础
 author: mobilephone724
 math: true
+next: /database/wal/wal_insert
 ---
-# From `access/transam/README`
+> From `access/transam/README`
 
 ## Write-Ahead Log Coding
 
@@ -40,10 +41,4 @@ math: true
 * 仅在写下第（2）个日志前，数据库恰好崩溃，标志位才会被感知。（该标志位应该没有MVCC，否则会在事务层屏蔽）
     * 搜索时，不管这个中间状态
     * 插入时，如果发现这个中间状态，先在上一层的页插入对应key，以修复这个“崩溃”状态，再继续插入
-## Constructing a WAL record
-
-一个WAL记录包含
-1. WAL记录类型。（TODO不同的修改有不同的记录方式？）
-2. 这个页的修改方式
-3. 被修改的页的信息。被修改的页通过一个唯一ID标识，也可以有更多的关联数据（"record-specific data associated with the block"）。如果要写full page，就没有关联数据
 

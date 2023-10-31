@@ -3,3 +3,4 @@ resources/*
 .hugo_build.lock
 .obsidian
 config.toml.old
+.vscode/
