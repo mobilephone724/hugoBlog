@@ -2,7 +2,7 @@
 title: WAL基础
 author: mobilephone724
 math: true
-next: /database/wal/wal_insert
+next: /database/wal/insert
 ---
 > From `access/transam/README`
 

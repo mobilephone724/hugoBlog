@@ -2,7 +2,7 @@
 title: WAL日志的插入
 author: mobilephone724
 math: true
-prev: /database/wal/baisc
+prev: /database/wal/basic
 ---
 
 ## 接口函数

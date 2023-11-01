@@ -4,7 +4,7 @@ author: "mobilephone724"
 math: true
 ---
 
-# 序言
+## 序言
 `pgvector`是一个向量搜索（根据近似度）的插件，用来加速AKNN（approximate nearest neighbor）。
 `PASE`中提到，向量ANN算法包括4类
 1. tree-based algorithms
@@ -23,17 +23,17 @@ math: true
     `pgvector` 包括两个算法，`IVFFlat` 和 `HNSW`，后续内容将以这两个算法的内容及其实现展开。
 
 
-# IVFFlat
+## IVFFlat
 
-## 概览
+### 概览
 IVFFlat 算法主要包括以下几个步骤
 + 索引构建阶段
     + 使用 `KMeans` 将数据集划分成多个簇(cluster)
 + 查询阶段
     + 通过每个簇的中心点（向量是高维的点）获取N个最近的簇
     + 遍历这N个簇的所有点，从中找到最近的K个点
-## 算法介绍
-### 基础算法kmeans
+### 算法介绍
+#### 基础算法kmeans
 reference [k-means clustering - Wikipedia](https://en.wikipedia.org/wiki/K-means_clustering)
 算法目标：选取K个中心点，使得数据集中的所有点到其最近的中心点“距离”之和最近，以平方和距离为例：
 
@@ -47,13 +47,13 @@ Given an initial set of $k$ means $m_1^{1}, \dots , m_k^{(1)}$ (see below),
    
     where each $x_p$is assigned to exactly one $S^{t}$, even if it could be assigned to two or more of them.
 2. **Update step**: Recalculate means ([centroids](https://en.wikipedia.org/wiki/Centroids "Centroids")) for observations assigned to each cluster.![](kmeans_update_step.png)
-### kmeans 优化篇
+#### kmeans 优化篇
 上述算法虽然简洁，但计算上复杂度高。在pgvector的IVFFlat实现中，使用了一些优化算法，主要是如下两篇论文：
 * Using Triangle Inequality: 使用三角不等式减少两点间距离的计算次数
 * KMeans++ :使用随机点的选取技巧来提高收敛速度和准确率
 [Using the Triangle Inequality to Accelerate k-Means (aaai.org)](https://cdn.aaai.org/ICML/2003/ICML03-022.pdf)
 [kMeansPP-soda.pdf (stanford.edu)](https://theory.stanford.edu/~sergei/papers/kMeansPP-soda.pdf)
-#### Using Triangle Inequality
+##### Using Triangle Inequality
 思路：
 1. 在高维向量中，计算一次两点之间的距离的代价较高。
 2. 根据一些朴素的思想，假如使用的距离函数满足三角不等式$d(a,b) \leq d(a,c) + d(b,c)$，那么在一次`kmeams`迭代中，如果点 `x` 距其中心点 `c(x)` 的距离很近，而 `c(x)` 距另一个中心点 `c(y)` 的距离很远，那么`c(y)`必然不是`x` 的中心点，这样就可以避免一次计算。
@@ -66,7 +66,7 @@ Given an initial set of $k$ means $m_1^{1}, \dots , m_k^{(1)}$ (see below),
 根据上述定理，在Kmeans迭代期间，维护一些状态，即可减少计算量
 过程如 [使用三角不等式优化Kmeans]({{<ref "#trianlge-inequality-kmeans" >}})
 
-#### KMeans++
+##### KMeans++
 论文中的数学分析很多，其主要目的为：通过在初始化的时候选取恰当的中心点，减少迭代次数。方法为：
 假设向量的全集为$X=\{x_1,x_2,\dots,x_n\}\subset \mathbb{R}^d$  ,$D(x)$ 表示点 $x$ 到其当前中心点的距离
 
@@ -75,14 +75,14 @@ Given an initial set of $k$ means $m_1^{1}, \dots , m_k^{(1)}$ (see below),
 3. 重复上一步直到我们选择了 $k$ 个中心点，
 4. 使用标准的k-means算法进行后续处理
 
-## 实现介绍
+### 实现介绍
 
-#### page representation
+##### page representation
 ![](IVF-pages-represent.png)
 
-### Key functions
+#### Key functions
 
-#### index build
+##### index build
 索引构建分为以下几个步骤
 
 1. 计算中心点
@@ -101,7 +101,7 @@ ivfflatbuild
 		FreeBuildState
 ```
 
-##### 计算中心点
+###### 计算中心点
 
 1. 实现上，没有扫描所有的行以计算中心点，而是“采样”一些`block`。
     1. 会选择$ncenter \times 50$ 作为采样`block`的数量
@@ -139,7 +139,7 @@ SampleCallback
 				VectorArraySet	# replace a old with this one randomly
 ```
 
-##### 构建元信息页
+###### 构建元信息页
 
 ```
 CreateMetaPage # info about meta information
@@ -148,7 +148,7 @@ CreateMetaPage # info about meta information
 	IvfflatCommitBuffer
 ```
 
-##### 构建中心点页
+###### 构建中心点页
 当一个页的剩余空间不够时，使用字段`nextblkno`指向下一个页
 ```
 typedef struct IvfflatPageOpaqueData
@@ -171,7 +171,7 @@ CreateListPages # info about center infomation
 		PageAddItem # copy this point to the page
 ```
 
-##### 构建数据页
+###### 构建数据页
 ```
 CreateEntryPages # omit parallel optimization here
 	AssignTuples # Scan table for tuples to index
@@ -190,16 +190,16 @@ CreateEntryPages # omit parallel optimization here
 
 
 
-#### index scan
+##### index scan
 
-##### begin scan
+###### begin scan
 ```
 ivfflatbeginscan
     IvfflatGetMetaPageInfo(index, &lists, &dimensions);  # Get lists and dimensions from metapage
     
 ```
 
-##### get tupele
+###### get tupele
 ```
 ivfflatgettuple
     if (first) # try to get the first tuple
@@ -216,9 +216,9 @@ ivfflatgettuple
                         tuplesort_puttupleslot
                     
 ```
-# HNSW
+## HNSW
 
-## 概览
+### 概览
 
 HNSW 算法主要包括以下几个步骤
 * 索引构建
@@ -231,13 +231,13 @@ HNSW 算法主要包括以下几个步骤
     * 从高层图向底层图搜索，使用高层图的结果$S$作为低层图$S$和$C$的初始值。
 
 ![](illustration-of-HNSW.png)
-## 算法介绍
+### 算法介绍
 
 一下顺序只是为了便于理解，不代表论文发布顺序。更多细节可参考论文。
 
-### NSW —— HNSW的起源?
+#### NSW —— HNSW的起源?
 NSW可以视为邻近图，每个点维护至多$K$个距离其最近的点，此时HNSW退化为只有一层的特殊情况。
-#### NSW的构建
+##### NSW的构建
 构建NSW的算法如下（此处忽略边角情况以方便理解
 ```
 INPUT: a set of points S
@@ -293,7 +293,7 @@ FOREACH point IN S:           ---------- INSERT_POINT(graph, point)
 # All points have been added
 RETURN G
 ```
-#### NSW的搜索
+##### NSW的搜索
 ```
 OUTPUT: graph G, point P
 RETURN K nearest neighbors
@@ -327,7 +327,7 @@ RETURN candidates
 
 
 
-### HNSW —— NSW的进化
+#### HNSW —— NSW的进化
 
 显然，上述过程最大的问题之一为：
 1. 对于图的构建：每新加入一个点，都需要从一个随机点开始搜索它的邻居。
@@ -370,8 +370,8 @@ return closest_points
 ```
 
 
-## PGVECTOR中的算法实现
-### INSERT
+### PGVECTOR中的算法实现
+#### INSERT
 
 ![](HNSW_INSERT_ALGORITH.png)
 ``` HnswInsertElement
@@ -420,7 +420,7 @@ HnswInsertElement(HnswElement element, HnswElement entryPoint,
 
 ```
 
-### search layer
+#### search layer
 ![](HNSW_SEARCH_LAYER_ALGORITHM.png)
 ```
 /*
@@ -485,12 +485,12 @@ HnswSearchLayer(Datum q, List *ep, int ef, int lc, Relation index,
 	return W
 ```
 
-#### pairing heap
+##### pairing heap
 [配对堆 - OI Wiki (oi-wiki.org)](https://oi-wiki.org/ds/pairing-heap/)
 * insert($\mathrm{log}n$)
 * random_select($\mathrm{log} n$) select_min($\mathrm{log} n$) 
 * delete_min($\mathrm{log} n$)
-### select neighbors
+#### select neighbors
 ![](HNSW_SELECT_NEIGHBORS_ALGORITHMS.png)
 
 ```SelectNeighbors
@@ -537,7 +537,7 @@ SelectNeighbors(List *c, int m, int lc, FmgrInfo *procinfo, Oid collation,
     
     
 ```
-### data structure
+#### data structure
 ```c
 typedef struct HnswElementData
 {
@@ -568,18 +568,18 @@ typedef struct HnswNeighborArray
 
 
 
-#### 底层实现中的问题
+##### 底层实现中的问题
 1. 论文中的图是双向连接，而pgvector实现的是单向连接
 2. pgvector中插入新向量时，没有更新其邻居的连接。（这么低级的问题有待验证）
 
 
-## page representation
+### page representation
 
 ![image-20231007080940352](HNSW_PAGE_REPRESENTATION.png)
 ![](PGVEC-HNSW-PAGE.png)
-# vector database 调研
+## vector database 调研
 
-## qdrant
+### qdrant
 
 ![image-20231007080940352](./image-20231007080940352.png)
 
@@ -589,7 +589,7 @@ typedef struct HnswNeighborArray
 
 ![image-20231007081700863](./image-20231007081700863.png)
 
-### 算法与存储
+#### 算法与存储
 
 qdrant使用 `hnsw` 算法
 
@@ -605,9 +605,9 @@ payload 索引仅用于过滤，我们关注向量索引部分
 
 
 
-# 附录
+## 附录
 
-## trianlge-inequality-Kmeans
+### trianlge-inequality-Kmeans
 
 
 * 维护的状态：
@@ -638,7 +638,7 @@ payload 索引仅用于过滤，我们关注向量索引部分
 
 
 
-## 采样算法 Knuth's algorithm S
+### 采样算法 Knuth's algorithm S
 
 ^0ff671
 
@@ -658,7 +658,7 @@ for i in (n, M)
 
 
 
-# 后记
+## 后记
 
 * pg官方的新闻：[PostgreSQL: pgvector 0.5.0 Released!](https://www.postgresql.org/about/news/pgvector-050-released-2700/) 。pgvector在社区的热度不小
 

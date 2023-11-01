@@ -7,8 +7,9 @@ cascade:
 
 ## 这里记录什么
 {{< cards >}}
-  {{< card link="log-base" title="log base" icon="document-duplicate" >}}
-  {{< card link="pgvec" title="pgvector" icon="adjustments" >}}
-  {{< card link="predicate_lock" title="predicate lock" icon="markdown" >}}
-  {{< card link="read-google-f1" title="google f1" icon="sparkles" >}}
+  {{< card link="log-base" title="log base" >}}
+  {{< card link="pgvec" title="pgvector">}}
+  {{< card link="predicate_lock" title="predicate lock">}}
+  {{< card link="read-google-f1" title="google f1">}}
+  {{< card link="wal" title="write ahead log">}}
 {{< /cards >}}
