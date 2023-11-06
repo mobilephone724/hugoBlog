@@ -31,7 +31,7 @@ title: Mobileophone724 的博客
 
 ## 最新动态
 {{< callout type="warning" >}}
-  新换了主题，很多东西还需要适配，所以一些页面开着很奇怪
+  暂缓WAL的代码阅读，先集中看CLOG相关的代码。
 {{< /callout >}}
 {{< callout emoji="🌐" type="info">}}
   [pgvector 的原理](database/pgvec/)
