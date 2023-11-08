@@ -373,7 +373,7 @@ return closest_points
 ### PGVECTOR中的算法实现
 #### INSERT
 
-![](HNSW_INSERT_ALGORITH.png)
+![](https://raw.githubusercontent.com/mobilephone724/blog_pictures/master/database/pgvec/HNSW_INSERT_ALGORITH.png)
 ``` HnswInsertElement
 /*
  * Algorithm 1 from paper: update graph by inserting an element
