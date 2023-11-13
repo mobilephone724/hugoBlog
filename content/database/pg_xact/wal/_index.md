@@ -1,7 +1,5 @@
 ---
 title: WAL(write ahead log)
-cascade:
-  type: docs
 ---
 
 ## 整理一些WAL相关的内容

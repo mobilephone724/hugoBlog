@@ -11,5 +11,5 @@ cascade:
   {{< card link="pgvec" title="pgvector">}}
   {{< card link="predicate_lock" title="predicate lock">}}
   {{< card link="read-google-f1" title="google f1">}}
-  {{< card link="wal" title="write ahead log">}}
+  {{< card link="pg_xact" title="transaction">}}
 {{< /cards >}}

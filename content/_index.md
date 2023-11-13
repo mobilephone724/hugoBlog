@@ -27,7 +27,12 @@ title: Mobileophone724 的博客
 {{< /cards >}}
 
 ## TODO List
-* 研究wal日志的代码，学习一下设计思路设计
+* [ ] 完成slru的代码阅读
+* [ ] 完成clog的代码阅读
+* [ ] 研究wal日志的代码
+  * [x] 基础
+  * [ ] WAL 格式
+  * [ ] WAL 插入
 
 ## 最新动态
 {{< callout type="warning" >}}
