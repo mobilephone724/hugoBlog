@@ -27,7 +27,7 @@ title: Mobileophone724 的博客
 {{< /cards >}}
 
 ## TODO List
-* [ ] 完成slru的代码阅读
+* [x] 完成slru的代码阅读
 * [ ] 完成clog的代码阅读
 * [ ] 研究wal日志的代码
   * [x] 基础

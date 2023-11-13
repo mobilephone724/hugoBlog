@@ -120,7 +120,7 @@ typedef struct SlruCtlData
 
 #### 基础函数
 
-选择一个空slot
+* 选择一个空slot
 
 ```C
 /* Select the slot to re-use when we need a free slot. */
@@ -139,7 +139,7 @@ SlruSelectLRUPage(SlruCtl ctl, int pageno)
 }
 ```
 
-记录一个"most recently used"的page，`cur_lru_count++` 并用其赋值 
+* 记录一个"most recently used"的page，`cur_lru_count++` 并用其赋值 
 
 ```C
 #define SlruRecentlyUsed(shared, slotno)	\
@@ -152,6 +152,45 @@ SlruSelectLRUPage(SlruCtl ctl, int pageno)
 	} while (0)
 ```
 
+* 从磁盘中读取一个 `page`
+
+```C
+SlruPhysicalReadPage
+{
+    int	segno = pageno / SLRU_PAGES_PER_SEGMENT;
+    SlruFileName(ctl, path, segno);
+
+    /*
+     * In a crash-and-restart situation, it's possible for us to receive
+     * commands to set the commit status of transactions whose bits are in
+     * already-truncated segments of the commit log
+     */
+    fd = OpenTransientFile(path, O_RDONLY | PG_BINARY);
+    if (fd < 0 && !InRecovery) ereport()
+
+    pg_pread(fd, shared->page_buffer[slotno], BLCKSZ, offset)
+}
+```
+
+* 向磁盘中写入一个 `page`
+
+```C
+SlruPhysicalWritePage
+{
+    /* We must flush WAL before flush slru pages */
+    if (shared->group_lsn != NULL)
+    {
+        max_lsn = shared->group_lsn[lsnindex++];
+        XLogFlush(max_lsn);
+    }
+
+    SlruFileName(ctl, path, segno);
+    fd = OpenTransientFile(path, O_RDWR | O_CREAT | PG_BINARY);
+    pg_pwrite(fd, shared->page_buffer[slotno], BLCKSZ, offset)
+    /* Queue up a sync request for the checkpointer. */
+    ...
+}
+```
 
 #### interface
 
@@ -179,7 +218,7 @@ SimpleLruReadPage
     #infinite loop
         slotno = SlruSelectLRUPage(ctl, pageno);
         # for in IO slots, just wait
-        /* First step in-memory initialization */
+        /* update in-memory status */
         shared->page_number[slotno] = pageno;
         shared->page_status[slotno] = SLRU_PAGE_READ_IN_PROGRESS;
         shared->page_dirty[slotno] = false;
@@ -190,7 +229,7 @@ SimpleLruReadPage
 
         ok = SlruPhysicalReadPage(ctl, pageno, slotno);
 
-        /* require control lock */
+        /* re-acquire control lock */
         LWLockAcquire(shared->ControlLock, LW_EXCLUSIVE);
         # others
 }
@@ -203,12 +242,40 @@ SimpleLruReadPage
 ```C
 /* Control lock must be held at entry, and will be held at exit. */
 SimpleLruZeroPage
+{
     slotno = SlruSelectLRUPage(ctl, pageno);
     shared->page_number[slotno] = pageno;
     shared->page_status[slotno] = SLRU_PAGE_VALID;
     shared->page_dirty[slotno] = true;
+}
 ```
 难道，一旦获取 `ControlLock`，即可对任意 `slot` 进行修改？
 
 实际上，`SimpleLruReadPage` 读取的 `page`，必须已存在于磁盘（或者经由 `WAL` 来保证）。
 而 `SimpleLruZeroPage` 所初始化的 `page` 必须不存在。从使用逻辑上保证二者不产生冲突。
+
+* SimpleLruWritePage(SlruInternalWritePage)
+
+```C
+/* Control lock must be held at entry, and will be held at exit. */
+SlruInternalWritePage
+{
+    /* If a write is in progress, wait for it to finish */
+    /* Do nothing if page is not dirty */
+
+    /* update in-memory status */
+    shared->page_status[slotno] = SLRU_PAGE_WRITE_IN_PROGRESS;
+    shared->page_dirty[slotno] = false;
+
+    /* Acquire per-buffer lock and release control lock */
+    LWLockAcquire(&shared->buffer_locks[slotno].lock, LW_EXCLUSIVE);
+    LWLockRelease(shared->ControlLock);
+
+    SlruPhysicalWritePage(ctl, pageno, slotno, fdata);
+
+    /* re-acquire control lock */
+    LWLockAcquire(shared->ControlLock, LW_EXCLUSIVE);
+
+    shared->page_status[slotno] = SLRU_PAGE_VALID;
+}
+```
