@@ -48,8 +48,8 @@ So we can get the xid's index and offset in page and byte.
 Thinking of that one slru segment contains 32 pages, so we name the clog file as
 `0000`(contains xid in [0, 32 * CLOG_XACTS_PER_PAGE - 1]), `0001`(contains xid
 in [32 * CLOG_XACTS_PER_PAGE, 32 * CLOG_XACTS_PER_PAGE * 2 - 1]) and so on.
-Because four hex numbers can represent $16^4=2^12$ files with
-$2^12 \times 2^5 \times 8192 \times 4 = 2^{32}$ transactions' status(a int32 size)
+Because four hex numbers can represent $16^4=2^{12}$ files with
+$2^{12} \times 32 \times 8192 \times 4 = 2^{32}$ transactions' status(a int32 size)
 
 Attension, such simple mapping means that the pages in clog file don't have
 page headers. So we can't record `LSN`, `checksum` in each page. The lack of
