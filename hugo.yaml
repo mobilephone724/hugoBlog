@@ -15,15 +15,15 @@ outputs:
   page: [HTML]
   section: [HTML, RSS]
 
-defaultContentLanguage: zh-cn
+defaultContentLanguage: en
 languages:
+  en:
+    languageName: English
+    weight: 1
+    title: Hextra
   zh-cn:
     languageName: 简体中文
     languageCode: zh-CN
-    weight: 1
-    title: Hextra
-  en:
-    languageName: English
     weight: 2
     title: Hextra
 

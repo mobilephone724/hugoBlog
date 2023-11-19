@@ -2,7 +2,8 @@
 title: SLRU
 author: mobilephone724
 math: true
-draft: false
+weight: 1
+next: /database/pg_xact/slru/clog
 ---
 本文主要为`SLRU`本身的结构解读。
 
