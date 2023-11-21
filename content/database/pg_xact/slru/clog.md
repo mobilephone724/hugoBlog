@@ -64,6 +64,7 @@ doesn't need it indeed.
 During the process of generating a new `xid`, we make sure that the slru page
 exists.
 * If it's the first xid of the page, we allocate a new page in clog buffer.
+  * Also generate a WAL to record the birth of the page.
 * If not, the page must exist in memory or flushed into disk. So it's for slru
   layer to manage such situation.
 
@@ -87,5 +88,42 @@ delete:
 1. The judgement whether there is a file can be deleted is completed in slru
    layer(a loop to scan the directory), but clog layer supports a hook to judge
    one file.
-2. Advance the oldest clog xid
+2. Advance the oldest clog xid in shared memory
+3. Generate a clog truncate WAL record
+4. Real truncate. Complemented in slru layer.
+
+Details of the two kind WAL record will be shown later.
+
+## Set And Get
+Concerned with subtransactions ...
+> I can't totally figure out the commit tree without knowing the mechanism of
+> subtransaction. Just assuming subxids as a set of xids related to the main xid
+> seems not convictive enough for me. So I remain it here now and will finish it
+> after reading subtransactions)
+
+For now, it's enough to knowing that
+1. The pair of operations wouldn't generate any WAL record
+2. They are done during the commit or abort procedure.
+
+## Record changes in WAL
+Recall what mentioned above:
+* Extending a new page and delete a segment will generata a WAL record.
+* Setting commit status wouldn't
+
+For the latter one, it's unbelievable but tricky. Since only the transactions
+that changes the content data(some hint flags are exception, such as tuple
+infomask) will have a xid(and then record on clog segment). During the replay of
+such transactions' commit(or abort) WAL record, we can redo the clog by the way.
+
+For the former one, it's a matter of course, since we must guarantee the clog to
+be recovery-safe. But some details deserve a glance;
+* For extending a new page, it makes no difference that we flush the WAL record
+  now or later. Since once we want to set status in a non-existent page during
+  recovery, we can padding a new empty page. This trick doesn't affect the page
+  usage.
+* For deleting a clog segment, we have no chance to remedy the lost of clogs,
+  and the disaster means a lot of tuple can be accessed at all. So regardless of
+  the synchronous commit level, we must ensure the WAL record has flushed into
+  disk before really delete the segments.
+
 

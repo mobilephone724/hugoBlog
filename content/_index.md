@@ -29,18 +29,27 @@ title: Mobileophone724 的博客
 ## TODO List
 * [x] 完成slru的代码阅读
 * [ ] 完成clog的代码阅读
+  * [x] 完成了除 `set commit tree` 外的其他部分
+  * [ ] 完成了除 `commit tree`
+* [ ] 完成 `subtransaction` 的代码阅读
 * [ ] 研究wal日志的代码
   * [x] 基础
   * [ ] WAL 格式
   * [ ] WAL 插入
 
 ## 最新动态
-{{< callout type="warning" >}}
-  暂缓WAL的代码阅读，先集中看CLOG相关的代码。
+{{< callout emoji="🌐" type="info">}}
+  [SLRU 代码阅读](database/pg_xact/slru/slru/)
 {{< /callout >}}
+
 {{< callout emoji="🌐" type="info">}}
   [pgvector 的原理](database/pgvec/)
 {{< /callout >}}
+
 {{< callout emoji="🌐" type="info">}}
-  [WAL基础](database/wal/basic/)
+  [WAL基础](database/pg_xact/wal/basic/)
+{{< /callout >}}
+
+{{< callout type="info" >}}
+  还是用英语写顺手，切换输入法太麻烦了。
 {{< /callout >}}
