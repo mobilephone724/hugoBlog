@@ -1,6 +1,3 @@
-[submodule "public"]
-	path = public
-	url = https://github.com/mobilephone724/mobilephone724.github.io
 [submodule "themes/hextra"]
 	path = themes/hextra
 	url = https://github.com/mobilephone724/hextra
