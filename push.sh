@@ -7,7 +7,7 @@ hugo
 ### publish
 cd public
 git add .
-git commit --amend -m 'xxx'
+git commit -m 'xxx'
 git push origin master -f
 cd ..
 
