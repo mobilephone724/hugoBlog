@@ -1,9 +1,6 @@
 [submodule "themes/hextra"]
 	path = themes/hextra
 	url = https://github.com/mobilephone724/hextra
-[submodule "static"]
-	path = static
-	url = https://github.com/mobilephone724/blog_pictures.git
 [submodule "public"]
 	path = public
 	url = https://github.com/mobilephone724/mobilephone724.github.io.git
