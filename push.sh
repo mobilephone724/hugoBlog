@@ -11,13 +11,6 @@ git commit -m 'xxx'
 git push origin master -f
 cd ..
 
-### static
-cd static
-git add .
-git commit -m "$1"
-git push origin master -f
-cd ..
-
 ### source the last ---------------------
 git add .
 git commit -m "$1"
