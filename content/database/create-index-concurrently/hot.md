@@ -71,18 +71,18 @@ heap_page_prune_opt()
 ```c
 heap_page_prune()
 {
-	for (offnum = FirstOffsetNumber;
-		 	 offnum <= maxoff;
+  for (offnum = FirstOffsetNumber;
+        offnum <= maxoff;
        offnum = OffsetNumberNext(offnum))
   {
-  	heap_prune_chain(&prstate)
+    heap_prune_chain(&prstate)
   }
   
   if (prstate.nredirected > 0 || prstate.ndead > 0 || prstate.nunused > 0)
   {
     heap_page_prune_execute();
   }
-		 
+     
 }
 
 ```
@@ -94,21 +94,21 @@ heap_page_prune()
 ```c
 heap_prune_chain()
 {
-	/* while not end of the chain */
-	for (;;)
-	{
-		lp = PageGetItemId(dp, offnum);
-		/* Unused item obviously isn't part of the chain */
-		if (!ItemIdIsUsed(lp))
-			break;
-			
-		if (ItemIdIsRedirected(lp))
+  /* while not end of the chain */
+  for (;;)
+  {
+    lp = PageGetItemId(dp, offnum);
+    /* Unused item obviously isn't part of the chain */
+    if (!ItemIdIsUsed(lp))
+      break;
+      
+    if (ItemIdIsRedirected(lp))
     {
-			if (nchain > 0)
-				break;			/* not at start of chain */
-			chainitems[nchain++] = offnum;
-			offnum = ItemIdGetRedirect(rootlp);
-			continue;
+      if (nchain > 0)
+        break;			/* not at start of chain */
+      chainitems[nchain++] = offnum;
+      offnum = ItemIdGetRedirect(rootlp);
+      continue;
     }
     
     if (ItemIdIsDead(lp))
@@ -117,40 +117,40 @@ heap_prune_chain()
     htup = (HeapTupleHeader) PageGetItem(dp, lp);
     
     /*
-		 * Check the tuple XMIN against prior XMAX, if any
-		 */
-		if (TransactionIdIsValid(priorXmax) &&
-			!TransactionIdEquals(HeapTupleHeaderGetXmin(htup), priorXmax))
-			break;
+     * Check the tuple XMIN against prior XMAX, if any
+     */
+    if (TransactionIdIsValid(priorXmax) &&
+      !TransactionIdEquals(HeapTupleHeaderGetXmin(htup), priorXmax))
+      break;
 
- 		/* record each item of this chain */
-   	chainitems[nchain++] = offnum;
+     /* record each item of this chain */
+     chainitems[nchain++] = offnum;
     
     switch ((HTSV_Result) prstate->htsv[offnum])
     {
-    	case: HEAPTUPLE_DEAD:
-      	tupdead = true;
+      case: HEAPTUPLE_DEAD:
+        tupdead = true;
         break;
       case HEAPTUPLE_RECENTLY_DEAD:
         heap_prune_record_prunable(prstate,
-										   						 HeapTupleHeaderGetUpdateXid(htup));
+                                    HeapTupleHeaderGetUpdateXid(htup));
       ...
     }
     
-	}
+  }
   
   if (OffsetNumberIsValid(latestdead))
   {
     for (i = 1; (i < nchain) && (chainitems[i - 1] != latestdead); i++)
-		{
-			heap_prune_record_unused(prstate, chainitems[i]);
-			ndeleted++;
-		}
+    {
+      heap_prune_record_unused(prstate, chainitems[i]);
+      ndeleted++;
+    }
     
     if (i >= nchain) /* The whole chain is dead */
-    	heap_prune_record_dead(prstate, rootoffnum);
+      heap_prune_record_dead(prstate, rootoffnum);
     else						/* Or just redirect */
-			heap_prune_record_redirect(prstate, rootoffnum, chainitems[i]);
+      heap_prune_record_redirect(prstate, rootoffnum, chainitems[i]);
   }
 }
 ```
@@ -169,19 +169,19 @@ heap_page_prune_execute()
   for (int i = 0; i < nredirected; i++)
   {
     ItemIdSetRedirect(fromlp, tooff);
-	}
+  }
   
   /* dead */
   for (int i = 0; i < ndead; i++)
   {
-		ItemIdSetDead(lp);
+    ItemIdSetDead(lp);
   }
   
   /* unused */
   for (int i = 0; i < nunused; i++)
   {
     ItemIdSetUnused(lp);
-	}
+  }
   PageRepairFragmentation();
   page_verify_redirects();
 }
@@ -203,8 +203,6 @@ heap_hot_search_buffer()
   {
     lp = PageGetItemId(page, offnum);
     heapTuple->t_data = (HeapTupleHeader) PageGetItem(page, lp);
-
-    
   }
 }
 ```

@@ -2,7 +2,6 @@
 hugo
 
 
-### submodule first ----------------
 
 ### publish
 cd public
