@@ -42,7 +42,7 @@ HEAP PAGE
 
 ### heap_page_prune
 
-###  `heap_page_prune_opt` 
+####  `heap_page_prune_opt` 
 
 > Optionally prune and repair fragmentation in the specified page.
 
@@ -64,7 +64,7 @@ heap_page_prune_opt()
 }
 ```
 
-### `heap_page_prune`
+#### `heap_page_prune`
 
 >  Prune and repair fragmentation in the specified page.
 
@@ -87,7 +87,7 @@ heap_page_prune()
 
 ```
 
-### `heap_prune_chain`
+#### `heap_prune_chain`
 
 > Prune specified line pointer or a HOT chain originating at line pointer.
 
@@ -157,7 +157,7 @@ heap_prune_chain()
 
 > `heap_prune_record_redirect` 
 
-### `heap_page_prune_execute`
+#### `heap_page_prune_execute`
 
 > Perform the actual page changes needed by heap_page_prune
 
@@ -189,7 +189,7 @@ heap_page_prune_execute()
 
 
 
-### search HOT chain
+#### search HOT chain
 
 >  `heap_hot_search_buffer` search HOT chain for tuple satisfying snapshot
 
