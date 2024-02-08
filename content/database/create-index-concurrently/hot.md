@@ -72,7 +72,7 @@ heap_page_prune_opt()
 heap_page_prune()
 {
   for (offnum = FirstOffsetNumber;
-        offnum <= maxoff;
+       offnum <= maxoff;
        offnum = OffsetNumberNext(offnum))
   {
     heap_prune_chain(&prstate)

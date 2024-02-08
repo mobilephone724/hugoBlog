@@ -1,7 +1,8 @@
 ### generate all files
 hugo
 
-
+### Is there an updates in submodule?
+git submodule update --init
 
 ### publish
 cd public
