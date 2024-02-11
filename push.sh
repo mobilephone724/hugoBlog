@@ -1,8 +1,8 @@
-### generate all files
-hugo
-
 ### Is there an updates in submodule?
 git submodule update --init
+
+### generate all files
+hugo
 
 ### publish
 cd public
