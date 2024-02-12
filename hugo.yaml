@@ -44,19 +44,19 @@ menu:
   main:
     - identifier: PostgreSQL
       name: PostgreSQL
-      pageRef: /PostgreSQL
+      pageRef: /postgresql
       weight: 1
     - identifier: Linux
       name: Linux
-      pageRef: /Linux
+      pageRef: /linux
       weight: 2
     - identifier: Topics
       name: Topics
-      pageRef: /Topics
+      pageRef: /topics
       weight: 3
     - identifier: Docs
       name: Docs
-      pageRef: /Docs
+      pageRef: /docs
       weight: 4
 
     # - identifier: miscellaneous

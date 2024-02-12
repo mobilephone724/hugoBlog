@@ -1,12 +1,11 @@
 ---
-title: "SSL in PG2"
+title: SSL in PG
 date: 2024-02-12T20:30:38+08:00
 draft: false
 ---
 
-# SSL In PostgreSQL
 
-# Overview
+## Overview
 
 In application level, ”PostgreSQL“ has native supports for using SSL connections. This requires that OpenSSL is installed on both client and server systems and that support in PostgreSQL is enabled at build time.
 
@@ -16,9 +15,9 @@ With SSL, we can:
 2. Allow client to authorize the server(PostgreSQL), which can protect the client from connecting to the attacker’s server
 3. Allow server to authorize the client, which can stop the attacker from connecting to the database even if password leak.
 
-# Just encrypt internet transmission
+## Just encrypt internet transmission
 
-## build binary from source
+### build binary from source
 
 just configure with `-with-openssl`  option.  You may need to install `ssl-dev` tools first
 
@@ -68,9 +67,9 @@ echo "to connect postgresql"
 cd ..
 ```
 
-## Configure ssl on server
+### Configure ssl on server
 
-### prepare a certification
+#### prepare a certification
 
 use `openssl` command to generate one. The `127.0.0.1` means that the certification only protects localhost connections
 
@@ -88,7 +87,7 @@ openssl x509 -req -in server.csr -text -days 365 \
   -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt
 ```
 
-### configure in `$PGDATA`
+#### configure in `$PGDATA`
 
 copy the `key` and `crt` to `$PGDATA`
 
@@ -108,7 +107,7 @@ ssl_key_file = 'server.key'
 
 And (re)start the server
 
-### connect and test
+#### connect and test
 
 ```bash
 psql "host=127.0.0.1 port=5432 dbname=postgres user=postgres sslmode=require"
@@ -116,7 +115,7 @@ psql "host=127.0.0.1 port=5432 dbname=postgres user=postgres sslmode=require"
 
 ![Untitled](https://raw.githubusercontent.com/mobilephone724/blog_pictures/master/tls-connection.2024_02_12_1707741369.png)
 
-# Server sides Authorization
+## Server sides Authorization
 
 Note that the client hasn’t check the certification of the server now. Check in this way:
 
@@ -125,7 +124,7 @@ PGSSLROOTCERT=ca.crt \
 psql "host=127.0.0.1 port=5432 dbname=postgres user=postgres sslmode=require"
 ```
 
-# Client sides Authorization
+## Client sides Authorization
 
 Generate certification similarly
 
@@ -149,7 +148,7 @@ echo -e "\nssl_ca_file = 'ca-client.crt'" >> $PGDATA/postgresql.conf
 
 and restart
 
-## test connection
+### test connection
 
 Before connection, remember to set `pg_hba.conf` to only authorized with cetification.
 

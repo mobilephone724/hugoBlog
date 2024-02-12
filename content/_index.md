@@ -7,7 +7,8 @@ title: Blog Of Mobileophone724
 * freshman in database
 * coredump analyzer (one must analyze his own coredump)
 
-## post list
+## Some valuable Posts
 
-* [pgvector](PostgreSQL/pgvector)
-* 
+* [pgvector](postgresql/pgvector)
+* [ssl-in-PG](topics/ssl/ssl-in-pg)
+* [create-index-currently](postgresql/create-index-currently)
