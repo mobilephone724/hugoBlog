@@ -1,5 +1,5 @@
 ---
-title: Mobileophone724 的博客
+title: Blog Of Mobileophone724
 ---
 
 # Hello! Welcome
@@ -9,5 +9,5 @@ title: Mobileophone724 的博客
 
 ## post list
 
-* [pgvector](docs/pgvector)
+* [pgvector](PostgreSQL/pgvector)
 * 
