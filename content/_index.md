@@ -4,22 +4,43 @@ title: Blog Of Mobileophone724
 
 # Hello! Welcome
 ## Whoami
-* freshman in database
-* coredump analyzer (one must analyze his own coredump)
+- freshman in database
+- coredump analyzer (one must analyze his own coredump)
 
-## Some valuable Posts
+## TOP FIVE NEWEST
+- [从零开始证明RSA](zero2rsa)
 
-{{< cards >}}
-  {{<card link="topics/ssl/zero2rsa"
-     title="从零开始证明RSA"
-     subtitle="从初等数学开始，探究经典的RSA算法的数学原理">}}
+## PostgreSQL
+### SLRU RELATED
+- The reason and implement of [simple lru](slru)
+- [commit log: the visibility of transactions](clog)
+- "todo" [subtransaction]
+- "todo" [multitransaction]
 
-  {{<card link="postgresql/pgvector"
-     title="pgvector and vector database"
-     subtitle="the algorithms of vector search and how does pgvector implement the">}}
+### WAL RELATED
+- [log based database](database-log)
+- [The idea of WAL](wal-basic)
+- [Generate a WAL log](wal-insert)
+- "todo" [IO method of WAL]
+- "todo" [Decode a WAL]
+- "todo" [WAL level]
 
-  {{<card link="topics/ssl/ssl-in-pg"
-     title="ssl-in-pg"
-     subtitle="how to config ssl in PostgreSQL">}}
+### DDL
+- "todo" [nbtree index]
+- "todo" [index access method]
+- [create index concurrently](create-index-currently)
+- [principle of pg_repack and online ddl](pg_repack)
 
-{{< /cards >}}
+
+### others of PostgreSQL
+- [ssl in pg](ssl-in-pg)
+- [pgvector](pgvector)
+- [hash join](hashjoin)
+- [sequence type](sequence_type)
+
+
+## others
+- [google f1 file system](google-f1)
+- [从零开始证明RSA](zero2rsa)
+- [linux file interface](linux-file)
+- [cublas related](cublasdgemmtutor)

@@ -1,19 +1,7 @@
 ---
-markup: mmark
-math: true
-weight: 100
-title: "basic of cublasDgemm"
-draft: false
+title: "cublasDgemm"
 author: "mobilephone724"
-# description: "Hugo provides multiple built-in shortcodes for author convenience and to keep your markdown content clean."
-tags: ["cublasDgemm"]
-categories: ["cuda"]
-lightgallery: true
-toc:
-  enable: true
-  auto: true
-date: 2022-03-05T09:41:11+08:00
-publishDate: 2022-03-05T09:41:11+08:00
+math: true
 ---
 ## concept
 `cublasDgemm` is a convenient function in cublas to compute the product of two matrix, while letter 'D' in `cublasDgemm` means `double`.
