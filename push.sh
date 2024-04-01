@@ -1,10 +1,15 @@
 ### Is there an updates in submodule?
 git submodule update --init
 
+### publish dir
+cd public
+git checkout master
+cd ..
+
 ### generate all files
 hugo
 
-### publish
+### publish dir
 cd public
 git add .
 git commit -m 'xxx'
