@@ -8,6 +8,7 @@ title: Blog Of Mobileophone724
 
 ## TOP FIVE NEWEST
 - [从零开始证明RSA](zero2rsa)
+- [paper reaading of roaring bitmap](0x01)
 
 ## PostgreSQL
 ### Basic
