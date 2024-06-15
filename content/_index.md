@@ -61,4 +61,4 @@ For each blog named with number, the map to name is give here
 - 0x01: [roaring bitmap: paper reaading](0x01)
 - 0x02: [TAO: paper reading](0x02) #todo
 - 0x03: [Multitransaction](0x03) #todo
-- 0x04: [MESI: paper reading](0x4) #todo 
+- 0x04: [MESI: paper reading](0x04) #todo 
