@@ -9,6 +9,7 @@ title: Blog Of Mobileophone724
 ## 0x1 TOP FIVE NEWEST
 - [从零开始证明RSA](zero2rsa)
 - [paper reaading of roaring bitmap](0x01)
+- [MESI: paper reading](0x04)
 
 ## 0x2 PostgreSQL
 ### 0x21 Basic
@@ -61,4 +62,4 @@ For each blog named with number, the map to name is give here
 - 0x01: [roaring bitmap: paper reaading](0x01)
 - 0x02: [TAO: paper reading](0x02) #todo
 - 0x03: [Multitransaction](0x03) #todo
-- 0x04: [MESI: paper reading](0x04) #todo 
+- 0x04: [MESI: paper reading](0x04)
