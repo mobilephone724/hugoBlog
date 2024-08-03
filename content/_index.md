@@ -63,3 +63,5 @@ For each blog named with number, the map to name is give here
 - 0x02: [TAO: paper reading](0x02) #todo
 - 0x03: [Multitransaction](0x03) #todo
 - 0x04: [MESI: paper reading](0x04)
+- 0x05: [Constant Time Recovery in Azure SQL Database: paper reading](0x05) #doing
+- 0x06: [Number of Reversed Inode](0x06)
