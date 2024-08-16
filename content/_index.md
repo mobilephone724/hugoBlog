@@ -10,6 +10,13 @@ title: Blog Of Mobileophone724
 - [从零开始证明RSA](zero2rsa)
 - [paper reaading of roaring bitmap](0x01)
 - [MESI: paper reading](0x04)
+- [Constant Time Recovery in Azure SQL Database: paper reading](0x05)
+- [Everyday PostgreSQL](0x0b)
+
+## 0x11 DOING
+- 0x08: [create index](0x08) #doing
+- 0x09: [create index concurrently](0x09) #doing
+- 0x0A: [create index parallelly](0x0a) #doing
 
 ## 0x2 PostgreSQL
 ### 0x21 Basic
@@ -33,13 +40,11 @@ title: Blog Of Mobileophone724
 - [principle of pg_repack and online ddl](pg_repack)
 - #todo [nbtree index]
 - #todo [index access method]
-- #todo  [create index concurrently](create-index-currently)
 - #doing  [column schema change](column-schema-change)
 
 ### 0x25 data representation
 - #doing  [page representation](heap-page-representation)
 - #todo  [nbtree representation](nbtree-representation)
-- 
 
 ### 0x2F others of PostgreSQL
 - [ssl in pg](ssl-in-pg)
@@ -63,6 +68,10 @@ For each blog named with number, the map to name is give here
 - 0x02: [TAO: paper reading](0x02) #todo
 - 0x03: [Multitransaction](0x03) #todo
 - 0x04: [MESI: paper reading](0x04)
-- 0x05: [Constant Time Recovery in Azure SQL Database: paper reading](0x05) #doing
+- 0x05: [Constant Time Recovery in Azure SQL Database: paper reading](0x05)
 - 0x06: [Number of Reversed Inode](0x06)
 - 0x07: ["-fwrapv" option in gcc](0x07)
+- 0x08: [create index](0x08)
+- 0x09: [create index concurrently](0x09)
+- 0x0A: [create index parallelly](0x0a)
+- 0x0B: [Everyday PostgreSQL](0x0b)
