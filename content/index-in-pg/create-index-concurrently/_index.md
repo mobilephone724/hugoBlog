@@ -1,0 +1,119 @@
+---
+title: "create index concurrently"
+date: 2024-08-13T21:18:43+08:00
+weight: 1
+---
+
+
+## 概述
+* 解决的问题：
+  * 同步创建索引 `create index concurrently` 解决了创建索引期间，如何不阻塞正常执行 `DML` 的问题。
+* 思路：
+  * 和 `pg_repack` , `pg_squeeze` 等重写表的工具相似，内核中实现的同步创建索引也使用了 “存量 + 增量” 的方式。
+  * 不同的是，官方提供的同步创建索引功能，几乎没有和任何其他特性耦合，例如没有使用触发器和逻辑复制。
+
+---
+难点有：
+1. 在不同的字段上，新创建一个索引会破坏 `heap` 中的原 `HOT` 链：如果可以锁表，那么这个问题非常好解决，但是要求同步创建，则该问题显得非常棘手
+2. 在不使用触发器和逻辑复制等功能的情况下，如何记录增量数据？
+
+---
+简单流程：通过三个事务完成
+1. 事务一：创建索引文件和修改系统表。 此时索引为 `not read` + `not valid`。但其他 SQL 需要遵循对应的 HOT 规则。
+2. 事务二：获取快照 `A` ，使用对该快照可见的元组创建索引。事务二结束后，其他 SQL 修改表时，也需要修改对应的索引。
+3. 事务三：获取快照 `B` ，将快照 `B` 可见但快照 `A` 不可见的元组插入索引
+
+
+
+
+## draft
+
+### Official document
+
+https://www.postgresql.org/docs/current/sql-createindex.html
+
+>  Creating an index can interfere with regular operation of a database. Normally PostgreSQL locks the table to be indexed against writes and performs the entire index build with a single scan of the table. Other transactions can still read the table, but if they try to insert, update, or delete rows in the table they will block until the index build is finished. This could have a severe effect if the system is a live production database. Very large tables can take many hours to be indexed, and even for smaller tables, an index build can lock out writers for periods that are unacceptably long for a production system.
+>
+>  PostgreSQL supports building indexes without locking out writes. This method is invoked by specifying the `CONCURRENTLY` option of `CREATE INDEX`. When this option is used, PostgreSQL must perform two scans of the table, and in addition it must wait for all existing transactions that could potentially modify or use the index to terminate. Thus this method requires more total work than a standard index build and takes significantly longer to complete. However, since it allows normal operations to continue while the index is built, this method is useful for adding new indexes in a production environment. Of course, the extra CPU and I/O load imposed by the index creation might slow other operations.
+>
+>  In a concurrent index build, **the index is actually entered as an “invalid” index into the system catalogs in one transaction, then two table scans occur in two more transactions**. Before each table scan, the index build must wait for existing transactions that have modified the table to terminate. **After the second scan, the index build must wait for any transactions that have a snapshot (see [Chapter 13](https://www.postgresql.org/docs/current/mvcc.html)) predating the second scan to terminate**, including transactions used by any phase of concurrent index builds on other tables, if the indexes involved are partial or have columns that are not simple column references. Then finally the index can be marked “valid” and ready for use, and the `CREATE INDEX` command terminates. Even then, however, the index may not be immediately usable for queries: in the worst case, it cannot be used as long as transactions exist that predate the start of the index build.
+>
+>  If a problem arises while scanning the table, such as a deadlock or a uniqueness violation in a unique index, the `CREATE INDEX` command will fail but leave behind an “invalid” index. This index will be ignored for querying purposes because it might be incomplete; however it will still consume update overhead. The psql `\\d` command will report such an index as `INVALID`:
+
+### Others’ blog
+
+*  [PostgreSQL create index concurrently原理分析](https://www.notion.so/PostgreSQL-create-index-concurrently-4ebd2ea38bb24324bc0e165e017daea1?pvs=21)
+*  https://postgrespro.com/blog/pgsql/3994098
+*  https://postgrespro.com/blog/pgsql/4161264
+
+### 核心问题
+
+*  两次快照读的原因
+*  怎么“正好只”补充两次快照之间的增量数据？
+*  merge 是怎么实现的？
+
+```c
+/*
+ * validate_index - support code for concurrent index builds
+ *
+ * We do a concurrent index build by first inserting the catalog entry for the
+ * index via index_create(), marking it not indisready and not indisvalid.
+ * Then we commit our transaction and start a new one, then we wait for all
+ * transactions that could have been modifying the table to terminate.  Now
+ * we know that any subsequently-started transactions will see the index and
+ * honor its constraints on HOT updates; so while existing HOT-chains might
+ * be broken with respect to the index, no currently live tuple will have an
+ * incompatible HOT update done to it.  We now build the index normally via
+ * index_build(), while holding a weak lock that allows concurrent
+ * insert/update/delete.  Also, we index only tuples that are valid
+ * as of the start of the scan (see table_index_build_scan), whereas a normal
+ * build takes care to include recently-dead tuples.  This is OK because
+ * we won't mark the index valid until all transactions that might be able
+ * to see those tuples are gone.  The reason for doing that is to avoid
+ * bogus unique-index failures due to concurrent UPDATEs (we might see
+ * different versions of the same row as being valid when we pass over them,
+ * if we used HeapTupleSatisfiesVacuum).  This leaves us with an index that
+ * does not contain any tuples added to the table while we built the index.
+ *
+ * Next, we mark the index "indisready" (but still not "indisvalid") and
+ * commit the second transaction and start a third.  Again we wait for all
+ * transactions that could have been modifying the table to terminate.  Now
+ * we know that any subsequently-started transactions will see the index and
+ * insert their new tuples into it.  We then take a new reference snapshot
+ * which is passed to validate_index().  Any tuples that are valid according
+ * to this snap, but are not in the index, must be added to the index.
+ * (Any tuples committed live after the snap will be inserted into the
+ * index by their originating transaction.  Any tuples committed dead before
+ * the snap need not be indexed, because we will wait out all transactions
+ * that might care about them before we mark the index valid.)
+ *
+ * validate_index() works by first gathering all the TIDs currently in the
+ * index, using a bulkdelete callback that just stores the TIDs and doesn't
+ * ever say "delete it".  (This should be faster than a plain indexscan;
+ * also, not all index AMs support full-index indexscan.)  Then we sort the
+ * TIDs, and finally scan the table doing a "merge join" against the TID list
+ * to see which tuples are missing from the index.  Thus we will ensure that
+ * all tuples valid according to the reference snapshot are in the index.
+ *
+ * Building a unique index this way is tricky: we might try to insert a
+ * tuple that is already dead or is in process of being deleted, and we
+ * mustn't have a uniqueness failure against an updated version of the same
+ * row.  We could try to check the tuple to see if it's already dead and tell
+ * index_insert() not to do the uniqueness check, but that still leaves us
+ * with a race condition against an in-progress update.  To handle that,
+ * we expect the index AM to recheck liveness of the to-be-inserted tuple
+ * before it declares a uniqueness error.
+ *
+ * After completing validate_index(), we wait until all transactions that
+ * were alive at the time of the reference snapshot are gone; this is
+ * necessary to be sure there are none left with a transaction snapshot
+ * older than the reference (and hence possibly able to see tuples we did
+ * not index).  Then we mark the index "indisvalid" and commit.  Subsequent
+ * transactions will be able to use it for queries.
+ *
+ * Doing two full table scans is a brute-force strategy.  We could try to be
+ * cleverer, eg storing new tuples in a special area of the table (perhaps
+ * making the table append-only by setting use_fsm).  However that would
+ * add yet more locking issues.
+```
+

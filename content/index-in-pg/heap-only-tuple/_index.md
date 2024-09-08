@@ -1,14 +1,27 @@
 ---
-title: create index concurrently
+title: HOT(Heap Only Tuple)
 ---
+[Drawing 2024-09-08 11.26.46.excalidraw](content/index-in-pg/heap-only-tuple/Drawing%202024-09-08%2011.26.46.excalidraw.md)
+
+# 概述
+
+简单而言, HOT 用于消除元组更新引起的索引膨胀，原理如下图所示
+
+![image-20240907121139135](./hot_block.png)
 
 
-# Simply Speaking
 
-Simply speaking, a technical to reduce the table and index **bloat** caused by **updating**, through a link from old tuple(dead tuple) to new tuple **if the changed attribute isn't in any indexes**. With such links:
+![image-20240908114744268](./hot_page.png)
 
-1. No need to generate a **new index entry** to represent the new tuple.
-2. Old versions of updated tuples can be actually **removed by normal operations** instead of vacuum operation only
+
+
+1. 索引指向 line_ptr_1 ，line_ptr_1 指向 tuple_1 ，tuple_1 被更新后成为 tuple_2，此时 tuple_1 指向 tuple_2
+2. 索引指向 line_ptr_3 , line_ptr_3 指向 line_ptr_4 ，line_ptr_4 指向 tuple3
+
+显然，HOT 技术具有如下优点
+
+1. 对于被更新的元组，无需创建新的索引指针指向新元组
+2. 旧元组可以被“普通操作”删除掉，并不一定需要 vacuum
 
 ## related posts
 
@@ -20,8 +33,8 @@ For more details , see `postgresql/src/backend/access/heap/README.HOT`
 
 Main Commits:
 
-* `282d2a03dd30804b01f8042f640d638c2ee76604`  HOT updates
-* `6f10eb21118f1ce72d4dd144c494749e25658d51`  Refactor heap_page_prune
+* `282d2a03dd`  HOT updates
+* `6f10eb2111`  Refactor heap_page_prune
 
 # HIGH LEVEL DESIGN
 
@@ -33,6 +46,9 @@ Main Commits:
 HEAP PAGE
 
 ![image-20240122220305837](https://raw.githubusercontent.com/mobilephone724/blog_pictures/master/heap_page.2024_01_22_1705934933.png)
+
+
+
 
 # Low Level Design
 
@@ -189,7 +205,7 @@ heap_page_prune_execute()
 
 #### search HOT chain
 
->  `heap_hot_search_buffer` search HOT chain for tuple satisfying snapshot
+>  `heap_hot_search_buffer` search HOT chain for tuple satisfying snapshot
 
 ```C
 bool
