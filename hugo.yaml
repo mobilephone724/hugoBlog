@@ -3,10 +3,10 @@ baseURL: "https://mobilephone724.github.io/"
 title: "mobilephone724"
 theme: "hextra"
 
-# enableRobotsTXT: true
-# enableGitInfo: true
-# enableEmoji: false
-# hasCJKLanguage: true
+enableRobotsTXT: true
+enableGitInfo: true
+enableEmoji: false
+hasCJKLanguage: true
 
 # googleAnalytics: G-XXXXXXXXXX
 
@@ -15,21 +15,18 @@ outputs:
   page: [HTML]
   section: [HTML, RSS]
 
-defaultContentLanguage: en
+defaultContentLanguage: zh-cn
 languages:
-  en:
-    languageName: English
+  zh-cn:
+    languageName: 简体中文
+    languageCode: zh-CN
     weight: 1
-    title: mobilephone724
+    title: Hextra
 
 module:
   hugoVersion:
     extended: true
     min: "0.112.0"
-
-  # workspace: hugo.work
-  # imports:
-  #   path: github.com/imfing/hextra
 
 markup:
   goldmark:
@@ -73,27 +70,38 @@ menu:
       params:
         icon: github
 
+  sidebar:
+    - identifier: more
+      name: More
+      params:
+        type: separator
+      weight: 1
+    - identifier: pg_mail_list
+      name: "PostgreSQL Mail List"
+      url: "https://www.postgresql.org/list/"
+      weight: 2
+
 params:
   description: home of mobilephone724 
 
-  # navbar:
-  #   displayTitle: true
-  #   displayLogo: true
-  #   logo:
-  #     path: images/logo.svg
-  #     dark: images/logo-dark.svg
-      # width: 40
-      # height: 20
-      # link: /
-    # width: wide
+  navbar:
+    displayTitle: true
+    displayLogo: true
+    logo:
+      path: images/logo.svg
+      dark: images/logo-dark.svg
+      width: 40
+      height: 20
+      link: /
+    width: wide
 
   page:
     # full (100%), wide (90rem), normal (1280px)
-    width: wide
+    width: normal
 
   theme:
     # light | dark | system
-    default: light
+    default: system
     displayToggle: true
 
   footer:

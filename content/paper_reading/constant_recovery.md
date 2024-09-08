@@ -1,5 +1,5 @@
 ---
-title: "0x05"
+title: "constant recovery with undo"
 date: 2024-07-07T15:53:54+08:00
 math: true
 ---

@@ -1,5 +1,5 @@
 ---
 title: Index In PostgreSQl
-toc: true
+weight: 2
 ---
 

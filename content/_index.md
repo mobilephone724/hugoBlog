@@ -1,5 +1,9 @@
 ---
 title: Blog Of Mobileophone724
+cascade:
+  math: true
+  toc: true
+  type: docs
 ---
 
 ## 0x0 Whoami

@@ -1,7 +1,6 @@
 ---
 title: HOT(Heap Only Tuple)
 ---
-[Drawing 2024-09-08 11.26.46.excalidraw](content/index-in-pg/heap-only-tuple/Drawing%202024-09-08%2011.26.46.excalidraw.md)
 
 # 概述
 
