@@ -12,19 +12,58 @@ weight: 1
   * 和 `pg_repack` , `pg_squeeze` 等重写表的工具相似，内核中实现的同步创建索引也使用了 “存量 + 增量” 的方式。
   * 不同的是，官方提供的同步创建索引功能，几乎没有和任何其他特性耦合，例如没有使用触发器和逻辑复制。
 
----
+
+
 难点有：
 1. 在不同的字段上，新创建一个索引会破坏 `heap` 中的原 `HOT` 链：如果可以锁表，那么这个问题非常好解决，但是要求同步创建，则该问题显得非常棘手
 2. 在不使用触发器和逻辑复制等功能的情况下，如何记录增量数据？
 
----
+
+
 简单流程：通过三个事务完成
+
 1. 事务一：创建索引文件和修改系统表。 此时索引为 `not read` + `not valid`。但其他 SQL 需要遵循对应的 HOT 规则。
 2. 事务二：获取快照 `A` ，使用对该快照可见的元组创建索引。事务二结束后，其他 SQL 修改表时，也需要修改对应的索引。
 3. 事务三：获取快照 `B` ，将快照 `B` 可见但快照 `A` 不可见的元组插入索引
 
+## 阶段1：创建空索引
 
+创建空索引的核心原因是：在将存量数据加入的索引中时，确保其他连接的修改不会破坏 HOT（更近一步的原因在阶段 2 描述）。方式为向 pg_index 中记录一个 `indisready==false && indisvalid==false` 的索引。所以问题在于：其他连接如何感知到该索引。
 
+每个连接都会缓存自己 `relcache` 和 `syscache` ，如果没有收到失效信息，这些缓存会一直保留。一般而言，事务开始时，会处理所有的缓存失效消息，在事务的执行的过程中，也有埋点来处理失效信息。但是处理结果不会返回给发送端。
+
+![image-20240909222219633](./empty_index.png)
+
+所以为了保证其他连接都会看到新索引，在创建空索引的事务结束后，需要等到当前所有其他事务全部结束，才能开启第二阶段
+
+---
+
+代码实现与上述有所差别：
+
+“等待其他事务” 并不是通过巡检 `ProcArray` 等方式实现，而是巧妙的使用了 `lmgr` 层的 `WaitForLockers` 实现：即等到没有连接持有该表的与 `ShareLock` 相冲突的锁：
+
+```C
+/*
+ * Now we must wait until no running transaction could have the table open
+ * with the old list of indexes.  Use ShareLock to consider running
+ * transactions that hold locks that permit writing to the table.  Note we
+ * do not need to worry about xacts that open the table for writing after
+ * this point; they will see the new index when they open it.
+ */
+WaitForLockers(heaplocktag, ShareLock, true);
+```
+
+（1）`SharedLock`  与 `select` 和 `select for update/share` 相冲突，持有者两种锁时，都无法破坏 HOT 链。（2）当进程执行修改表的操作时，已经需要打开表获取 `relcache` ，而在打开表操作时，会处理缓存失效信息。
+
+```
+relation_open/try_relation_open -> LockRelationOid -> AcceptInvalidationMessages
+```
+
+![image-20240910080804584](./image-20240910080804584.png)
+
+## 阶段2：使用存量数据创建索引
+
+为什么需要
 
 ## draft
 
