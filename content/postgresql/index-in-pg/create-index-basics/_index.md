@@ -24,7 +24,7 @@ weight: 2
    1. build relcache
    2. 创建文件 `smgrcreate`
    3. 记录依赖
-2. 向 `pg_class` , `pg_index` , `pg_attribute`  中写入对应的记录
+2. 向 `pg_class` , `pg_index` , `pg_attribute`  中写入对应的记录
 3. 注册对应表的缓存无效信息，会在事务结束时发送 `CacheInvalidateRelcache`
 
 
@@ -35,7 +35,7 @@ weight: 2
 
 在 index access method 内部，会使用回调函数 `heapam_index_build_range_scan` 来扫描 heap，以确定有哪些 tuple 需要被创建索引。
 
-1. 此时使用的快照为 `SnapshotAny` ，即所有表都可见。
+1. 此时使用的快照为 `SnapshotAny` ，即所有行都可见。
 2. 每当扫描到一个 `tuple` 时，像执行 vacuum 一样判断该 tuple 是否能被 vacuum。有一个 `tuple` 
    1. 对所有事务都不可见 `HEAPTUPLE_DEAD`，那么显然不需要对他创建索引
    2. 如果所有事务都可见 `HEAPTUPLE_LIVE`，那么显然需要对他创建索引
@@ -57,7 +57,7 @@ weight: 2
 
 ### 3-2 HOT
 
-如果该 tuple 在 HOT 链中（不在末尾），问题就有些棘手。
+如果该 tuple 在 HOT 链中（不在末尾，否则就是 `HEAPTUPLE_DEAD` OR `HEAPTUPLE_LIVE`），问题就有些棘手。
 
 1. 此时不方便将 HOT 链破坏掉。（创建索引的时候直接修改 HEAP 中内容确实不算合理）
 2. 但如果不破坏，就（必须）将该 tuple 加入到新索引中，而该 HOT 链可能和新索引冲突

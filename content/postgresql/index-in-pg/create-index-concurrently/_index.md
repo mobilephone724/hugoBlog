@@ -15,7 +15,7 @@ weight: 1
 
 
 难点有：
-1. 在不同的字段上，新创建一个索引会破坏 `heap` 中的原 `HOT` 链：如果可以锁表，那么这个问题非常好解决，但是要求同步创建，则该问题显得非常棘手
+1. 在不同的字段上，新创建一个索引会破坏 `heap` 中的原 `HOT` 链，创建的过程中也会影响到新的 `HOT` 链。
 2. 在不使用触发器和逻辑复制等功能的情况下，如何记录增量数据？
 
 
@@ -53,7 +53,7 @@ weight: 1
 WaitForLockers(heaplocktag, ShareLock, true);
 ```
 
-（1）`SharedLock`  与 `select` 和 `select for update/share` 相冲突，持有者两种锁时，都无法破坏 HOT 链。（2）当进程执行修改表的操作时，已经需要打开表获取 `relcache` ，而在打开表操作时，会处理缓存失效信息。
+（1）`SharedLock`  与 `select` 和 `select for update/share` 相冲突，持有者两种锁时，都无法破坏 HOT 链。（2）当进程执行修改表的操作时，已经需要打开表获取 `relcache` ，而在打开表操作时，会处理缓存失效信息。
 
 ```
 relation_open/try_relation_open -> LockRelationOid -> AcceptInvalidationMessages
@@ -63,7 +63,23 @@ relation_open/try_relation_open -> LockRelationOid -> AcceptInvalidationMessages
 
 ## 阶段2：使用存量数据创建索引
 
-为什么需要
+在确保所有连接都发现了该索引时，可以使用存量数据创建索引
+
+该过程和普通的创建索引相似，但是进行 `heap` 扫描时，使用的快照不同。在一般的索引创建中，使用的是 `SnapshotAny` ，所有行都可见，而 CIC 中使用的是当前事务的快照。
+
+问题仍然出现在 HOT 链上，虽然对于创建索引的字段，当前不会产生新的 HOT 链，但是仍然会有旧的 HOT 链。举个例子，当前对第二个字段建索引：
+
+
+
+## 阶段三： 增量数据的插入
+
+
+
+## FAQ
+
+### 1 为什么需要保证阶段二中：其他连接的修改不会破坏 HOT
+
+
 
 ## draft
 

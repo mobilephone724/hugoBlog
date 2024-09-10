@@ -12,7 +12,6 @@ In PostgreSQL, the adding and dropping a column is an instant ddl(This name seem
 
 ## Basic Concepts
 
-[For the heap page representation](heap-page-representation.md)
 
 ### instant ddl
 
@@ -24,7 +23,6 @@ In this scenario, pg only changes the `pg_attribute` catalog, which records the 
 
 ### heap page representation
 
-[page representation](heap-page-representation.md)
 
 Before illustrate the situation where interpreting the binary data with two different schemas, we figure out the way to organize the heap pages.
 
