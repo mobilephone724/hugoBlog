@@ -29,7 +29,7 @@ weight: 2
 
 
 
-### 3 调用对应的 index access method 创建索引
+## 3 调用对应的 index access method 创建索引
 
 这里和 HOT 关系较大，需要简单展开：
 
@@ -45,9 +45,9 @@ weight: 2
 
 ---
 
-`HEAPTUPLE_RECENTLY_DEAD` 是重点：如何处理
+### 3-1 如何处理 `HEAPTUPLE_RECENTLY_DEAD`
 
-### 3-1 非 HOT
+#### 3-1-1 非 HOT
 
 说明该 tuple 被删除了，但是有一些事务仍然对其可见，那么也需要加入到索引中。否则这些事务后续通过当前创建的索引就无法找到该元组。
 
@@ -55,9 +55,9 @@ weight: 2
 
 
 
-### 3-2 HOT
+#### 3-1-2 HOT
 
-如果该 tuple 在 HOT 链中（不在末尾，否则就是 `HEAPTUPLE_DEAD` OR `HEAPTUPLE_LIVE`），问题就有些棘手。
+如果该 tuple 在 HOT 链中，问题就有些棘手。
 
 1. 此时不方便将 HOT 链破坏掉。（创建索引的时候直接修改 HEAP 中内容确实不算合理）
 2. 但如果不破坏，就（必须）将该 tuple 加入到新索引中，而该 HOT 链可能和新索引冲突
@@ -79,3 +79,16 @@ weight: 2
 
 
 ![image-20240908163824450](./indcheckxmin.png)
+
+### 3-2 对 HOT 链上的元组构建索引
+
+由于创建新索引会导致已有的 HOT 链无效，这里还需讨论如何将已有 HOT 链中元组如何构建到索引中。考虑如下情形，现在需要对 `y` 这一列创建索引，只需要将 tuple_3 加入到索引中(y=2)即可。由于一个 line pointer 只能在一个 HOT 链中，所以此时索引应该指向 lp_1（注意 tuple_1 有 y=1)。
+
+![image-20240912154408429](./build_on_hot.png)
+
+
+
+如果想去“优化“ 新HOT链的长度，让索引指向 lp_2 或者 lp_3，会产生很多问题，例如指向 lp_2，那么此时 tuple_2 还是 heap only tuple 么？
+
+![image-20240912155430901](./build_on_hot_2.png)
+
