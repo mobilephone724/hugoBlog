@@ -1,7 +1,7 @@
 ---
 title: "create index concurrently"
 date: 2024-08-13T21:18:43+08:00
-weight: 1
+weight: 4
 ---
 
 
@@ -59,7 +59,7 @@ WaitForLockers(heaplocktag, ShareLock, true);
 relation_open/try_relation_open -> LockRelationOid -> AcceptInvalidationMessages
 ```
 
-![image-20240910080804584](./image-20240910080804584.png)
+![image-20240910080804584](waitforlockers.png)
 
 ## 阶段二：使用存量数据创建索引
 

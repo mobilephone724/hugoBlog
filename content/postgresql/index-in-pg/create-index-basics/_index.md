@@ -1,7 +1,7 @@
 ---
 title: "create index basics"
 date: 2024-09-08T14:41:35+08:00
-weight: 2
+weight: 3
 ---
 
 

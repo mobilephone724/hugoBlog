@@ -1,5 +1,6 @@
 ---
 title: HOT(Heap Only Tuple)
+weight: 2
 ---
 
 ## 概述
