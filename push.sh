@@ -8,6 +8,7 @@ cd ..
 
 ### generate all files
 hugo
+### or an older version  hugo_0_127_0
 
 ### publish dir
 cd public
