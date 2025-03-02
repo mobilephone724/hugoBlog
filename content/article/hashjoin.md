@@ -2,7 +2,6 @@
 title: hash join
 author: mobilephone724
 math: true
-weight: 2
 ---
 
 ## high level view

@@ -6,9 +6,8 @@ cd public
 git checkout master
 cd ..
 
-### generate all files
-hugo
-### or an older version  hugo_0_127_0
+### generate all files (use an older version)
+hugo_0_127_0
 
 ### publish dir
 cd public

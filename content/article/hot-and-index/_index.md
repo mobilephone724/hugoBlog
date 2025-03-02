@@ -1,7 +1,6 @@
 ---
 title: "Hot and Index"
 date: 2024-09-13T22:09:20+08:00
-weight: 1
 ---
 
 ## 概述

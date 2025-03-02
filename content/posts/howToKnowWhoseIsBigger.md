@@ -1,5 +1,4 @@
 ---
-weight: 3
 title: "Alice and Bob how to know whose number is bigger without giving away their own's"
 draft: false
 author: "mobilephone724"

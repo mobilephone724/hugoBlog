@@ -1,0 +1,34 @@
+From 6e737ac18d8468e7d9a1491ef3e095f85032e8ea Mon Sep 17 00:00:00 2001
+From: "mobile724.yang" <mobile724.yang@foxmail.com>
+Date: Sun, 2 Mar 2025 19:08:43 +0800
+Subject: [PATCH] Support math with MathJax
+
+---
+ layouts/partials/extend_head.html | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/layouts/partials/extend_head.html b/layouts/partials/extend_head.html
+index 150cbef..4c22aca 100644
+--- a/layouts/partials/extend_head.html
++++ b/layouts/partials/extend_head.html
+@@ -2,3 +2,16 @@
+ {{- /*     Insert any custom code (web-analytics, resources, etc.) - it will appear in the <head></head> section of every page. */ -}}
+ {{- /*     Can be overwritten by partial with the same name in the global layouts. */ -}}
+ {{- /* Head custom content area end */ -}}
++<!-- math support -->
++<script>
++    MathJax = {
++      tex: {
++        inlineMath: [['$', '$'], ['\\(', '\\)']],
++        displayMath: [['$$', '$$'], ['\\[', '\\]']],
++        processEscapes: true,
++        tags: 'ams'
++      }
++    };
++</script>
++<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
++<!-- math support end -->
+\ No newline at end of file
+-- 
+2.39.5 (Apple Git-154)
+

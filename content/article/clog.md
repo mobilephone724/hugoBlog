@@ -2,7 +2,6 @@
 title: CLOG
 author: mobilephone724
 math: true
-weight: 2
 prev: /database/pg_xact/slru/slru
 ---
 

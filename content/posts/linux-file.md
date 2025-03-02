@@ -1,5 +1,4 @@
 ---
-weight: 3
 title: "APUE/Chapter3: file and I/O"
 draft: false
 author: "mobilephone724"
