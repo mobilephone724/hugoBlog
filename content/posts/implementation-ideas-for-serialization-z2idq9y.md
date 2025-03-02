@@ -12,7 +12,7 @@ isCJKLanguage: true
 
 # 可串行化的实现思路
 
-paper: [ssi-vldb12.pdf](assets/ssi-vldb12-20250302221553-jfho50p.pdf)
+paper: https://drkp.net/papers/ssi-vldb12.pdf
 
 ## 可串行化冲突的例子
 
