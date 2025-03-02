@@ -16,8 +16,8 @@ Bare bitmap can cost much memory according to the total substantial data size, e
    - [[blog of charlieroro] roaring bitmaps](https://www.cnblogs.com/charlieroro/p/17919505.html)
    - [【木东居士】：不深入而浅出 Roaring Bitmaps 的基本原理](https://cloud.tencent.com/developer/article/1136054)
 -  paper 
-   - Introduction: [Better bitmap performance with Roaring bitmaps.pdf](Better%20bitmap%20performance%20with%20Roaring%20bitmaps.pdf)
-   - Opitmazition: [Consistently faster and smaller compressed bitmaps with Roaring.pdf](Consistently%20faster%20and%20smaller%20compressed%20bitmaps%20with%20Roaring.pdf)
+   - Introduction: [Better bitmap performance with Roaring bitmaps.pdf](https://raw.githubusercontent.com/mobilephone724/hugoBlog/siyuan-pub/images/Better%20bitmap%20performance%20with%20Roaring%20bitmaps.pdf)
+   - Opitmazition: [Consistently faster and smaller compressed bitmaps with Roaring.pdf](https://raw.githubusercontent.com/mobilephone724/hugoBlog/siyuan-pub/images/Consistently%20faster%20and%20smaller%20compressed%20bitmaps%20with%20Roaring.pdf)
 
 ## 0x2 Introduction TO Roaring Bitmap
 
