@@ -18,7 +18,7 @@ LSM-Tree（Log-Structured Merge-Tree）是一种为高写入吞吐设计的存�
 
 ‍
 
-​![lsmtree](assets/lsmtree-20250303233520-zn8ytar.png)​
+​![lsmtree](https://raw.githubusercontent.com/mobilephone724/hugoBlog/siyuan-pub/images/lsmtree-20250303233520-zn8ytar.png)​
 
 ---
 
