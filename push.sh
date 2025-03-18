@@ -19,7 +19,7 @@ cd ..
 ### source the last ---------------------
 git add .
 git commit -m "$1"
-git push origin master -f
+git push origin siyuan-pub -f
 
 
 # picture url
