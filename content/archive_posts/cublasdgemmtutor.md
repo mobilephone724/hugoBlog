@@ -1,7 +1,7 @@
 ---
 title: "cublasDgemm"
 author: "mobilephone724"
-math: true
+mathjax: true
 ---
 ## concept
 `cublasDgemm` is a convenient function in cublas to compute the product of two matrix, while letter 'D' in `cublasDgemm` means `double`.

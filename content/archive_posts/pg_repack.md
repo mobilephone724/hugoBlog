@@ -1,7 +1,7 @@
 ---
 title: "pg_repack"
 author: "mobilephone724"
-math: true
+mathjax: true
 ---
 
 ## principle

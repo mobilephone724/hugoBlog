@@ -1,7 +1,7 @@
 ---
 title: hash join
 author: mobilephone724
-math: true
+mathjax: true
 ---
 
 ## high level view

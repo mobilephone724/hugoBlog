@@ -1,7 +1,7 @@
 ---
 title: "MESI AND MEMORY_BARRIER: paper reading"
 date: 2024-06-16T01:12:36+08:00
-math: true
+mathjax: true
 ---
 
 -  paper 

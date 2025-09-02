@@ -5,7 +5,7 @@ author: "mobilephone724"
 # description: "Hugo provides multiple built-in shortcodes for author convenience and to keep your markdown content clean."
 tags: ["Zero—Knowledge Proof"]
 categories: ["cryptology"]
-math: true
+mathjax: true
 
 lightgallery: true
 toc:

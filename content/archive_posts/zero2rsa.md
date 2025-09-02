@@ -1,7 +1,7 @@
 ---
 title: "ZERO TO RSA"
 author: "mobilephone724"
-math: true
+mathjax: true
 ---
 
 ## 从0证明RSA

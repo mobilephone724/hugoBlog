@@ -1,7 +1,7 @@
 ---
 title: WAL日志的插入
 author: mobilephone724
-math: true
+mathjax: true
 prev: /database/wal/basic
 ---
 

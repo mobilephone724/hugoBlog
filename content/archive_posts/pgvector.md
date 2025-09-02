@@ -1,7 +1,7 @@
 ---
 title: "PGVECTOR AND VECTOR DATABASE"
 author: "mobilephone724"
-math: true
+mathjax: true
 ---
 
 ## 序言

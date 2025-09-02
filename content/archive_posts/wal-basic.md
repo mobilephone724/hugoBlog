@@ -1,7 +1,7 @@
 ---
 title: WAL基础
 author: mobilephone724
-math: true
+mathjax: true
 next: /database/wal/insert
 ---
 > From `access/transam/README`

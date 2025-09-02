@@ -1,7 +1,7 @@
 ---
 title: "roaring bitmap"
 date: 2024-05-07T21:04:38+08:00
-math: true
+mathjax: true
 ---
 
 ## 0x0 Introduction
